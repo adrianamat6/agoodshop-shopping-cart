@@ -1,0 +1,36 @@
+*{
+    box-sizing: border-box;
+}
+
+.tool-bar{
+    border-bottom: 0.8px rgb(145, 145, 145) solid;
+}
+
+
+#detail-products{
+    display:flex;
+}
+
+#product-list{
+    display:grid; 
+    grid-template-columns: 40% 20% 20% 20%;
+    grid-auto-rows: auto;
+    width: 70%;
+}
+
+#cart-table{
+    display:grid;
+    grid-template-columns: 70% 30%;
+    grid-auto-rows:auto;
+}
+
+#cart-summary{
+    display: flex;
+    flex-direction: column;
+
+}
+
+#cart-total{
+    display: flex;
+
+}

@@ -8,7 +8,8 @@
 
 #detail-products{
     display:flex;
-    margin:40px; 
+    margin-top:40px; 
+    gap: 25px; 
 }
 
 .header-grid{
@@ -19,6 +20,11 @@
 
 .col-product, .col-cantidad, .col-unidad, .col-total{
     padding:20px 0px; 
+}
+
+.col-cantidad, .col-unidad, .col-total{
+    display:flex; 
+    align-items: center;
 }
 
 .articulo{
@@ -34,20 +40,26 @@
     border: 0.5px gray solid; 
     border-radius:5px; 
     padding: 5px;
-    width: 15px;
+    width: 35px;
     aspect-ratio: 1 / 1;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+
 
 }
 
 .selector-cantidad{
     display: flex;
+    align-items: center;
+    gap: 15px; 
 }
 
 #product-list{
     display:grid; 
     grid-template-columns: 40% 20% 20% 20%;
     grid-auto-rows: auto;
-    width: 70%;
+    width: 65%;
 }
 
 #cart-table{
@@ -59,10 +71,20 @@
 #cart-summary{
     display: flex;
     flex-direction: column;
-
+    margin: 0px 5px; 
 }
 
 #cart-total{
     display: flex;
 
 }
+
+.article {
+    padding: 5px 0px; 
+}
+
+.total-article, .total-precio{
+    padding: 10px 0px; 
+    border-top: 0.5px gray solid; 
+}
+

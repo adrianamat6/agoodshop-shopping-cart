@@ -119,13 +119,17 @@ function pinta_producto_web(SKU,title,price,currency){
     selCantidad.classList.add('selector-cantidad'); 
 
     const divMenos = document.createElement('button'); 
+    divMenos.classList.add('restar'); 
     divMenos.textContent = '-'; 
+    divMenos.dataset.sku = SKU; 
+
 
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
     numUnidades.textContent = `1`; 
 
     const divMas = document.createElement('button'); 
+    divMas.classList.add('sumar'); 
     divMas.textContent = '+'; 
 
     // Anidamos los elementos
@@ -136,10 +140,6 @@ function pinta_producto_web(SKU,title,price,currency){
     colCantidad.appendChild(selCantidad); 
 
     nodoProductList.appendChild(colCantidad); 
-
-   
-
-
 
     // 3) Replicamos la tercera parte: 
     /*
@@ -177,7 +177,7 @@ for(let {SKU, title, price} of DB.products){
 
 
 //  ---------------------------------------------------
-
+/*
 nodoNumeroUnidades = document.querySelectorAll('.num-unidades'); 
 
 function check_number(){
@@ -190,14 +190,36 @@ function check_number(){
 
   return listaUnidades
 }; 
-
+*/
 
 //  ---------------------------------------------------
+console.log('---------------------------')
+console.log('Modificar Unidades')
+const nodoBotonesRestar = document.querySelectorAll('.restar'); 
+const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
+const nodoNumeroUnidades = document.querySelectorAll('.num-unidades'); 
 
-function modificar_numero_unidades(){
+function escucha_pulsaciones_restar(){
+  for (let nodoBotonResta of nodoBotonesRestar){
+    nodoBotonResta.addEventListener('click', restar_numero_unidades); 
+  }; 
+};
 
+
+function restar_numero_unidades(event){
+  const botonPulsado = event.target; 
+  const sku = botonPulsado.dataset.sku;
+
+  const nodoCantidad = document.getElementById(`cant-${sku}`);
+  console.log('sku es:',sku)
+  console.log('nodo cantidad',nodoCantidad)
+
+  console.log('Se ha pulsado un botón'); 
+  //numeroUnidades = Number(nodo.textContent) - 1;
+  //console.log(numeroUnidades); 
 }; 
 
+escucha_pulsaciones_restar();
 
 
 

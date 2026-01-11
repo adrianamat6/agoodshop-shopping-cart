@@ -118,14 +118,14 @@ function pinta_producto_web(SKU,title,price,currency){
     const selCantidad = document.createElement('div'); 
     selCantidad.classList.add('selector-cantidad'); 
 
-    const divMenos = document.createElement('div'); 
+    const divMenos = document.createElement('button'); 
     divMenos.textContent = '-'; 
 
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
-    numUnidades.textContent = `3`; 
+    numUnidades.textContent = `1`; 
 
-    const divMas = document.createElement('div'); 
+    const divMas = document.createElement('button'); 
     divMas.textContent = '+'; 
 
     // Anidamos los elementos
@@ -137,8 +137,7 @@ function pinta_producto_web(SKU,title,price,currency){
 
     nodoProductList.appendChild(colCantidad); 
 
-    console.log('----------------------------------')
-    console.log(nodoProductList.outerHTML);
+   
 
 
 
@@ -168,12 +167,37 @@ console.log('------------------')
 currency = DB.currency; 
 
 for(let {SKU, title, price} of DB.products){
-    console.log(`El SKU es: ${SKU}`);
-    console.log(`El title es: ${title}`);
-    console.log(`El price es: ${price}`);
+   // console.log(`El SKU es: ${SKU}`);
+   //console.log(`El title es: ${title}`);
+   //console.log(`El price es: ${price}`);
 
     pinta_producto_web(SKU,title,price,currency); 
 
 }
+
+
+//  ---------------------------------------------------
+
+nodoNumeroUnidades = document.querySelectorAll('.num-unidades'); 
+
+function check_number(){
+  let listaUnidades = [];
+
+  for (let nodo of nodoNumeroUnidades) {
+    let numeroUnidades = Number(nodo.textContent);
+    listaUnidades.push(numeroUnidades);
+  }
+
+  return listaUnidades
+}; 
+
+
+//  ---------------------------------------------------
+
+function modificar_numero_unidades(){
+
+}; 
+
+
 
 

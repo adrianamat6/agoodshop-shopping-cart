@@ -154,7 +154,7 @@ function pinta_producto_web(SKU,title,price,currency){
 
     const colTotal = document.createElement('div'); 
     colTotal.classList.add('col-total'); 
-    colTotal.textContent = `${price}+${currency}`
+    colTotal.textContent = `${price}${currency}`
 
     nodoProductList.appendChild(colUnidad); 
     nodoProductList.appendChild(colTotal); 

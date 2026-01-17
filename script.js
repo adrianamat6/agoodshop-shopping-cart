@@ -18,92 +18,85 @@ const DB = {
         "SKU": "IOKW9BQ9F3",
         "title": "Funda de piel",
         "price": "79.99"
-      },
-      {
-        "SKU": "A1B2C3D4E5",
-        "title": "AirPods Pro (2nd Gen)",
-        "price": "279.00"
-      },
-      {
-        "SKU": "F6G7H8I9J0",
-        "title": "Apple Watch Series 9",
-        "price": "449.00"
-      },
-      {
-        "SKU": "K1L2M3N4O5",
-        "title": "iPad Air M2",
-        "price": "699.00"
-      },
-      {
-        "SKU": "P6Q7R8S9T0",
-        "title": "MacBook Air 13 M3",
-        "price": "1299.00"
-      },
-      {
-        "SKU": "U1V2W3X4Y5",
-        "title": "Magic Mouse",
-        "price": "85.00"
-      },
-      {
-        "SKU": "Z6A7B8C9D0",
-        "title": "Teclado Mecánico RGB",
-        "price": "120.50"
-      },
-      {
-        "SKU": "E1F2G3H4I5",
-        "title": "Monitor 4K 27 pulgadas",
-        "price": "349.99"
       }
     ]
 };
 
-console.log('----------------------')
-console.log(DB.products)
-console.log('----------------------')
 
 // --------------------------------------------------------
 
-// Creamos clase (vacío de cantidades, pero sabe los precios gracias a DB).
 class Carrito {
     constructor(products) {
       this.products = products; 
       this.cesta = {}; 
-
     }
 
     actualizarUnidades(SKU, cantidad) {
       this.cesta[SKU] = cantidad; 
     }
     
-    // Necesitamos esto para que el botón sepa si hay 0, 1 o 20 antes de sumar
     obtenerCantidad(SKU) {
-      
-      if (this.cesta[SKU] ==='undefined'){
+      if (this.cesta[SKU] === undefined){
         return 0;
-      }else{
+      } else {
         return this.cesta[SKU]; 
       }
     }
 
+    obtenerInformacionProducto(SKU) {
+      return {
+        sku: SKU, 
+        quantity: this.obtenerCantidad(SKU)
+      }; 
+    }
 
+    obtenerCarrito() {
+    const productosEnCesta = this.cesta; 
+    const productosCatalogo = this.products; 
+
+    // 1. Filtramos los productos que están en la cesta
+    const productosEncontrados = productosCatalogo.filter((cadaProducto) => {
+        return cadaProducto.SKU in productosEnCesta;
+    });
+
+    // 2. Usamos .map() para crear el array final con la cantidad dentro de cada uno
+    const carrito_productos = productosEncontrados.map((cadaProducto) => {
+        // Obtenemos la cantidad usando tu método (añadiendo 'this.')
+        const unidades = this.obtenerCantidad(cadaProducto.SKU);
+
+        // Retornamos un nuevo objeto que combina lo que ya tenía el producto + la cantidad
+        return {
+            cadaProducto,    // Esto copia SKU, title y price
+            quantity: unidades,  // Esto añade la cantidad
+            total: Number((unidades * cadaProducto.price)).toFixed(2),
+        };
+
+        });
+
+        // 3. Calculamos el precio total a pagar 
+        let sumaTotal = 0; 
+        for(let producto of carrito_productos){
+          sumaTotal += Number(producto.total); 
+        }
+    
+
+        // 4. Extraemos la lista de productos con su info y el precio total a pagar
+    return {
+        articulos: carrito_productos, 
+        granTotal: sumaTotal
+    };
+    }
+
+        
 }
-  // --------------------------------------------------------
+
 
 const miCarrito = new Carrito(DB.products);
-console.log('Mostramos la clase:')
-console.log(miCarrito); 
-console.log('----------------------')
+miCarrito.actualizarUnidades("0K3QOSOV4V", 4);
+miCarrito.actualizarUnidades("TGD5XORY1L", 8);
 
-console.log('Simulamos que metemos 5 iPhones')
-miCarrito.actualizarUnidades("OK3QOSOV4V",5)
-miCarrito.actualizarUnidades("TGD5XORY1L",10)
-console.log(miCarrito); 
-
-console.log('----------------------')
-
-
-
-
+carrito = miCarrito.obtenerCarrito()
+console.log(carrito)
 
 
 

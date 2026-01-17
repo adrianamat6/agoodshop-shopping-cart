@@ -57,6 +57,55 @@ const DB = {
     ]
 };
 
+console.log('----------------------')
+console.log(DB.products)
+console.log('----------------------')
+
+// --------------------------------------------------------
+
+// Creamos clase (vacío de cantidades, pero sabe los precios gracias a DB).
+class Carrito {
+    constructor(products) {
+      this.products = products; 
+      this.cesta = {}; 
+
+    }
+
+    actualizarUnidades(SKU, cantidad) {
+      this.cesta[SKU] = cantidad; 
+    }
+    
+    // Necesitamos esto para que el botón sepa si hay 0, 1 o 20 antes de sumar
+    obtenerCantidad(SKU) {
+      
+      if (this.cesta[SKU] ==='undefined'){
+        return 0;
+      }else{
+        return this.cesta[SKU]; 
+      }
+    }
+
+
+}
+  // --------------------------------------------------------
+
+const miCarrito = new Carrito(DB.products);
+console.log('Mostramos la clase:')
+console.log(miCarrito); 
+console.log('----------------------')
+
+console.log('Simulamos que metemos 5 iPhones')
+miCarrito.actualizarUnidades("OK3QOSOV4V",5)
+miCarrito.actualizarUnidades("TGD5XORY1L",10)
+console.log(miCarrito); 
+
+console.log('----------------------')
+
+
+
+
+
+
 
 // Lectura de nodos del HTML padres: 
 nodoDetailProducts = document.querySelector('#detail-products'); 
@@ -220,6 +269,7 @@ function restar_numero_unidades(event){
 }; 
 
 escucha_pulsaciones_restar();
+
 
 
 

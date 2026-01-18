@@ -160,6 +160,7 @@ function pinta_producto_web(producto,currency){
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
     numUnidades.textContent = `0`; 
+    numUnidades.id = `unidades-${producto.SKU}`
 
     const divMas = document.createElement('button'); 
     divMas.classList.add('sumar'); 
@@ -194,38 +195,22 @@ function pinta_producto_web(producto,currency){
 }; 
 
 // ----------------------------------------------------------------------------------
-
-
+// Iniciamos
 currency = DB.currency; 
 productos = DB.products; 
 for(let producto of DB.products){
     pinta_producto_web(producto,currency); 
 }
 
-
-//  ---------------------------------------------------
-/*
-nodoNumeroUnidades = document.querySelectorAll('.num-unidades'); 
-
-function check_number(){
-  let listaUnidades = [];
-
-  for (let nodo of nodoNumeroUnidades) {
-    let numeroUnidades = Number(nodo.textContent);
-    listaUnidades.push(numeroUnidades);
-  }
-
-  return listaUnidades
-}; 
-*/
-
-//  ---------------------------------------------------
 const miCarrito = new Carrito(DB.products);
+// ----------------------------------------------------------------------------------
 
 console.log('---------------------------')
-console.log('Modificar Unidades')
 const nodoBotonesRestar = document.querySelectorAll('.restar'); 
 const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
+
+
+
 
 function escucha_pulsaciones_restar(){
   for (let btn of nodoBotonesRestar){
@@ -242,36 +227,53 @@ function escucha_pulsaciones_sumar(){
 
 
 function restar_numero_unidades(event){
-  console.log('Se ha pulsado un botón restar'); 
+  console.log('Se ha pulsado un botón sumar'); 
 
   const botonPulsado = event.target; 
   const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
 
+  console.log('botonPulsado:',botonPulsado)
   cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  console.log(Number(cantidad))
-
   miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
-  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  console.log(Number(cantidad))
+  cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
+  cantidad_actualizada
+
+
+  botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
+  console.log(botonUnidades)
+
+  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
+
+
+ 
 }; 
 
 function sumar_numero_unidades(event){
-  console.log('Se ha pulsado un botón restar'); 
+  console.log('Se ha pulsado un botón sumar'); 
 
   const botonPulsado = event.target; 
   const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
 
+  console.log('botonPulsado:',botonPulsado)
   cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  console.log(cantidad)
-
   miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
-  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  console.log(cantidad)
+  cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
+  cantidad_actualizada
 
-  console.log(miCarrito)
+
+  botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
+  console.log(botonUnidades)
+
+  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
 
 }; 
 
+
+function pintar_numeros_actualizados(nodoNumero,cantidad){
+  nodoNumero.innerHTML = `${cantidad}`
+
+  console.log(miCarrito.obtenerCarrito())
+}
 
 escucha_pulsaciones_restar();
 escucha_pulsaciones_sumar();

@@ -32,7 +32,11 @@ class Carrito {
     }
 
     actualizarUnidades(SKU, cantidad) {
+      if (cantidad <= 0){
+        this.cesta[SKU] = 0; 
+      }else{
       this.cesta[SKU] = cantidad; 
+      }; 
     }
     
     obtenerCantidad(SKU) {
@@ -90,23 +94,9 @@ class Carrito {
         
 }
 
+// ----------------------------------------------------------------------------------
 
-const miCarrito = new Carrito(DB.products);
-miCarrito.actualizarUnidades("0K3QOSOV4V", 4);
-miCarrito.actualizarUnidades("TGD5XORY1L", 8);
-
-carrito = miCarrito.obtenerCarrito()
-console.log(carrito)
-
-
-
-// Lectura de nodos del HTML padres: 
-nodoDetailProducts = document.querySelector('#detail-products'); 
-nodoProductList = document.querySelector('#product-list');  
-
-
-
-function pinta_producto_web(SKU,title,price,currency){
+function pinta_producto_web(producto,currency){
 
     // 1) Replicamos la primera parte: 
     /*
@@ -123,18 +113,19 @@ function pinta_producto_web(SKU,title,price,currency){
     // B) Creamos el contenedor del articulo
     const articulo = document.createElement('div');
     articulo.classList.add('articulo');
-    articulo.textContent = `${title}`;
+    articulo.textContent = `${producto.title}`;
 
     // C) Creamos contendor para añadir la referencia
     const referencia = document.createElement('div'); 
     referencia.classList.add('referencia');
-    referencia.textContent = `Ref: ${SKU}`;
+    referencia.textContent = `Ref: ${producto.SKU}`;
 
     // D) Anidamos el contenedor dentro del contenedor padre 'col-product'
     colProduct.appendChild(articulo);
     colProduct.appendChild(referencia); 
 
     // E) Anidamos los contenedores dentro del contenedor padre 'product-list'
+    const nodoProductList = document.querySelector('#product-list');
     nodoProductList.appendChild(colProduct); 
 
     // Visualiza resultados
@@ -163,16 +154,17 @@ function pinta_producto_web(SKU,title,price,currency){
     const divMenos = document.createElement('button'); 
     divMenos.classList.add('restar'); 
     divMenos.textContent = '-'; 
-    divMenos.dataset.sku = SKU; 
+    divMenos.dataset.sku = producto.SKU; 
 
 
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
-    numUnidades.textContent = `1`; 
+    numUnidades.textContent = `0`; 
 
     const divMas = document.createElement('button'); 
     divMas.classList.add('sumar'); 
     divMas.textContent = '+'; 
+    divMas.dataset.sku = producto.SKU; 
 
     // Anidamos los elementos
     selCantidad.appendChild(divMenos); 
@@ -191,30 +183,23 @@ function pinta_producto_web(SKU,title,price,currency){
 
     const colUnidad = document.createElement('div'); 
     colUnidad.classList.add('col-unidad'); 
-    colUnidad.textContent = `${price}`
+    colUnidad.textContent = `${producto.price}`
 
     const colTotal = document.createElement('div'); 
     colTotal.classList.add('col-total'); 
-    colTotal.textContent = `${price}${currency}`
+    colTotal.textContent = `${producto.price}${currency}`
 
     nodoProductList.appendChild(colUnidad); 
     nodoProductList.appendChild(colTotal); 
 }; 
 
-
-
-console.log('------------------')
+// ----------------------------------------------------------------------------------
 
 
 currency = DB.currency; 
-
-for(let {SKU, title, price} of DB.products){
-   // console.log(`El SKU es: ${SKU}`);
-   //console.log(`El title es: ${title}`);
-   //console.log(`El price es: ${price}`);
-
-    pinta_producto_web(SKU,title,price,currency); 
-
+productos = DB.products; 
+for(let producto of DB.products){
+    pinta_producto_web(producto,currency); 
 }
 
 
@@ -235,33 +220,61 @@ function check_number(){
 */
 
 //  ---------------------------------------------------
+const miCarrito = new Carrito(DB.products);
+
 console.log('---------------------------')
 console.log('Modificar Unidades')
 const nodoBotonesRestar = document.querySelectorAll('.restar'); 
 const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
-const nodoNumeroUnidades = document.querySelectorAll('.num-unidades'); 
 
 function escucha_pulsaciones_restar(){
-  for (let nodoBotonResta of nodoBotonesRestar){
-    nodoBotonResta.addEventListener('click', restar_numero_unidades); 
+  for (let btn of nodoBotonesRestar){
+    btn.addEventListener('click', restar_numero_unidades); 
+  }; 
+};
+
+function escucha_pulsaciones_sumar(){
+  // CORREGIDO: Ahora recorremos los botones de sumar
+  for (let btn of nodoBotonesSumar){
+    btn.addEventListener('click', sumar_numero_unidades); 
   }; 
 };
 
 
 function restar_numero_unidades(event){
+  console.log('Se ha pulsado un botón restar'); 
+
   const botonPulsado = event.target; 
-  const sku = botonPulsado.dataset.sku;
+  const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
 
-  const nodoCantidad = document.getElementById(`cant-${sku}`);
-  console.log('sku es:',sku)
-  console.log('nodo cantidad',nodoCantidad)
+  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
+  console.log(Number(cantidad))
 
-  console.log('Se ha pulsado un botón'); 
-  //numeroUnidades = Number(nodo.textContent) - 1;
-  //console.log(numeroUnidades); 
+  miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
+  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
+  console.log(Number(cantidad))
 }; 
 
+function sumar_numero_unidades(event){
+  console.log('Se ha pulsado un botón restar'); 
+
+  const botonPulsado = event.target; 
+  const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
+
+  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
+  console.log(cantidad)
+
+  miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
+  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
+  console.log(cantidad)
+
+  console.log(miCarrito)
+
+}; 
+
+
 escucha_pulsaciones_restar();
+escucha_pulsaciones_sumar();
 
 
 

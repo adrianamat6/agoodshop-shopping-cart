@@ -50,6 +50,12 @@ class Carrito {
       }; 
     }
 
+    obtenerNombreProducto(SKU){
+      const producto = this.products.find((p) => p.SKU === SKU);
+      const nombre = producto.title; 
+      return nombre; 
+    }
+
     obtenerTotalPorSku(SKU) {
     const producto = this.products.find((p) => p.SKU === SKU);
     const cantidad = this.obtenerCantidad(SKU);
@@ -60,7 +66,7 @@ class Carrito {
     return total.toFixed(2); // Devolvemos solo el número como string con 2 decimales
 }
 
-    obtenerCarrito() {
+    obtenerPrecioTotalCarrito() {
     const productosEnCesta = this.cesta; 
     const productosCatalogo = this.products; 
 
@@ -89,6 +95,36 @@ class Carrito {
        sumaTotal += Number(producto.total); 
     }
     
+    return sumaTotal; 
+
+}
+    
+    obtenerCarrito() {
+    const productosEnCesta = this.cesta; 
+    const productosCatalogo = this.products; 
+
+    // 1. Filtramos los productos que están en la cesta
+    const productosEncontrados = productosCatalogo.filter((cadaProducto) => {
+        return cadaProducto.SKU in productosEnCesta;
+    });
+
+    // 2. Usamos .map() para crear el array final con la cantidad dentro de cada uno
+    const carrito_productos = productosEncontrados.map((cadaProducto) => {
+        // Obtenemos la cantidad usando tu método (añadiendo 'this.')
+        const unidades = this.obtenerCantidad(cadaProducto.SKU);
+
+        // Retornamos un nuevo objeto que combina lo que ya tenía el producto + la cantidad
+        return {
+            cadaProducto,    // Esto copia SKU, title y price
+            quantity: unidades,  // Esto añade la cantidad
+            total: Number((unidades * cadaProducto.price)).toFixed(2),
+        };
+
+    });
+
+
+    
+    const sumaTotal = this.obtenerPrecioTotalCarrito(); 
 
     return {
         articulos: carrito_productos, 
@@ -106,29 +142,30 @@ miCarrito.actualizarUnidades("TGD5XORY1L", 8);
 carrito = miCarrito.obtenerCarrito()
 console.log(carrito)
 
-console.log('-----------')
-total = miCarrito.obtenerTotalPorSku("0K3QOSOV4V"); 
-console.log('total:',total)
 
 
 
-// ----------------------------------------------
-const nodoBotonesRestar = document.querySelectorAll('.restar'); 
-const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
-
-function escucha_pulsaciones_restar(){
-  for (let btn of nodoBotonesRestar){
-    btn.addEventListener('click', restar_numero_unidades); 
-  }; 
-};
-
-function escucha_pulsaciones_sumar(){
-  // CORREGIDO: Ahora recorremos los botones de sumar
-  for (let btn of nodoBotonesSumar){
-    btn.addEventListener('click', sumar_numero_unidades); 
-  }; 
-};
 
 
-escucha_pulsaciones_restar();
-escucha_pulsaciones_sumar();
+// // ----------------------------------------------
+// const nodoBotonesRestar = document.querySelectorAll('.restar'); 
+// const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
+
+// function escucha_pulsaciones_restar(){
+//   for (let btn of nodoBotonesRestar){
+//     btn.addEventListener('click', restar_numero_unidades); 
+//   }; 
+// };
+
+// function escucha_pulsaciones_sumar(){
+//   // CORREGIDO: Ahora recorremos los botones de sumar
+//   for (let btn of nodoBotonesSumar){
+//     btn.addEventListener('click', sumar_numero_unidades); 
+//   }; 
+// };
+
+
+
+
+// escucha_pulsaciones_restar();
+// escucha_pulsaciones_sumar();

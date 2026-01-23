@@ -50,6 +50,12 @@ class Carrito {
       }; 
     }
 
+    obtenerNombreProducto(SKU){
+      const producto = this.products.find((p) => p.SKU === SKU);
+      const nombre = producto.title; 
+      return nombre; 
+    }
+
     obtenerTotalPorSku(SKU) {
     const producto = this.products.find((p) => p.SKU === SKU);
     const cantidad = this.obtenerCantidad(SKU);
@@ -60,7 +66,7 @@ class Carrito {
     return total.toFixed(2); // Devolvemos solo el número como string con 2 decimales
 }
 
-    obtenerCarrito() {
+    obtenerPrecioTotalCarrito() {
     const productosEnCesta = this.cesta; 
     const productosCatalogo = this.products; 
 
@@ -89,6 +95,36 @@ class Carrito {
        sumaTotal += Number(producto.total); 
     }
     
+    return sumaTotal; 
+
+}
+    
+    obtenerCarrito() {
+    const productosEnCesta = this.cesta; 
+    const productosCatalogo = this.products; 
+
+    // 1. Filtramos los productos que están en la cesta
+    const productosEncontrados = productosCatalogo.filter((cadaProducto) => {
+        return cadaProducto.SKU in productosEnCesta;
+    });
+
+    // 2. Usamos .map() para crear el array final con la cantidad dentro de cada uno
+    const carrito_productos = productosEncontrados.map((cadaProducto) => {
+        // Obtenemos la cantidad usando tu método (añadiendo 'this.')
+        const unidades = this.obtenerCantidad(cadaProducto.SKU);
+
+        // Retornamos un nuevo objeto que combina lo que ya tenía el producto + la cantidad
+        return {
+            cadaProducto,    // Esto copia SKU, title y price
+            quantity: unidades,  // Esto añade la cantidad
+            total: Number((unidades * cadaProducto.price)).toFixed(2),
+        };
+
+    });
+
+
+    
+    const sumaTotal = this.obtenerPrecioTotalCarrito(); 
 
     return {
         articulos: carrito_productos, 
@@ -141,7 +177,7 @@ function pinta_producto_web(producto,currency){
 
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
-    numUnidades.textContent = `0`; 
+    numUnidades.textContent = Number(0); 
     numUnidades.id = `unidades-${producto.SKU}`
 
     const divMas = document.createElement('button'); 
@@ -166,7 +202,7 @@ function pinta_producto_web(producto,currency){
 
     const colTotal = document.createElement('div'); 
     colTotal.classList.add('col-total'); 
-    colTotal.textContent = `0${currency}`
+    colTotal.textContent = `${Number(0).toFixed(2)}${currency}`;
     colTotal.dataset.sku = producto.SKU; 
 
     nodoProductList.appendChild(colUnidad); 
@@ -186,10 +222,7 @@ const miCarrito = new Carrito(DB.products);
 
 
 // Logica de botones: 
-
-
 const nodoBotonesSumaryRestar = document.querySelectorAll('.sumar, .restar');
-console.log(nodoBotonesSumaryRestar); 
 
 
 function escucha_pulsaciones_sumar_o_restar(){
@@ -198,89 +231,93 @@ function escucha_pulsaciones_sumar_o_restar(){
   }; 
 };
 
+escucha_pulsaciones_sumar_o_restar()
+
 
 function sumar_o_restar_numero_unidades(event){
 
   const botonPulsado = event.target; 
-  const esSumar = botonPulsado.classList.contains('sumar'); 
   const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
+  const esSumar = botonPulsado.classList.contains('sumar'); 
 
   cantidad = miCarrito.obtenerCantidad(sku_pulsado);
   if(esSumar){
     miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
   }else{
-    miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
+    cantidad_restada = Math.max(0,cantidad-1); 
+    miCarrito.actualizarUnidades(sku_pulsado, cantidad_restada);
   }
 
+
+
   cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
-  
-  const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false)
+  const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`);
+  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false);
 
 
   const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
   total_actualizado = miCarrito.obtenerTotalPorSku(sku_pulsado); 
-  console.log(typeof(total_actualizado))
   pintar_numeros_actualizados(nodoProductoTotal,total_actualizado,true); 
 
-}; 
 
-
-function restar_numero_unidades(event){
-
-  const botonPulsado = event.target; 
-  const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
-
-  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
-  cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
-  cantidad_actualizada
-
-
-  botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-
-  nodoTotal = document.querySelector()
-
-
-  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
-
-
- 
-}; 
-
-function sumar_numero_unidades(event){
-
-  const botonPulsado = event.target; 
-  const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
-
-  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
-  miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
-  cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
   
+  pintar_total_carrito(sku_pulsado)
 
 
-  const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false)
-
-
-  const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
-  total_actualizado = miCarrito.obtenerTotalPorSku(sku_pulsado); 
-  console.log(typeof(total_actualizado))
-  pintar_numeros_actualizados(nodoProductoTotal,total_actualizado,true); 
 
 }; 
-
 
 function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency){
-
   if (mostrarCurrency){
-  nodoNumero.innerHTML = `${cantidad}${currency}`
+  nodoNumero.innerHTML = `${cantidad}${currency}`; 
   }else{
       nodoNumero.innerHTML = `${cantidad}`; 
   }
-}
+}; 
 
-escucha_pulsaciones_sumar_o_restar()
+
+function pintar_total_carrito(SKU){
+
+  nodoContenedorDerecha = document.querySelector('#cart-summary'); 
+  nodoTablaDerecha = document.querySelector('#cart-table');
+  console.log(nodoTablaDerecha)
+  
+  const tituloTotal = document.createElement('h2');
+  tituloTotal.textContent = 'Total'; 
+
+  nodoContenedorDerecha.appendChild(tituloTotal); 
+
+
+  // <div class="article">iFhone13 Pro</div>
+  // <div class="precio">2816,97€</div>
+
+  divArticle = document.createElement('div'); 
+  divArticle.classList.add('article'); 
+  divArticle.innerHTML = miCarrito.obtenerNombreProducto(SKU);
+  nodoTablaDerecha.appendChild(divArticle); 
+
+
+  divPrecio = document.createElement('div'); 
+  divPrecio.classList.add('precio'); 
+  divPrecio.innerHTML = `${miCarrito.obtenerTotalPorSku(SKU)}${currency}`; 
+  nodoTablaDerecha.appendChild(divPrecio); 
+
+
+    // <div class="total-article">TOTAL</div>
+    // <div class="total-precio">5820€</div> -->
+  divTOTAL = document.createElement('div'); 
+  divTOTAL.classList.add('total-article'); 
+  divTOTAL.innerHTML = 'TOTAL';
+  nodoTablaDerecha.appendChild(divTOTAL); 
+
+  divTotalPrecio = document.createElement('div'); 
+  divTotalPrecio.classList.add('total-precio'); 
+  divTotalPrecio.innerHTML = `${miCarrito.obtenerPrecioTotalCarrito()}${currency}`; 
+  nodoTablaDerecha.appendChild(divTotalPrecio); 
+
+
+  nodoContenedorDerecha.appendChild(nodoTablaDerecha); 
+}; 
 
 
 

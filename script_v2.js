@@ -50,6 +50,16 @@ class Carrito {
       }; 
     }
 
+    obtenerTotalPorSku(SKU) {
+    const producto = this.products.find((p) => p.SKU === SKU);
+    const cantidad = this.obtenerCantidad(SKU);
+
+    if (!producto) return "0"; // Si el SKU no existe en el catálogo
+
+    const total = producto.price * cantidad;
+    return total.toFixed(2); // Devolvemos solo el número como string con 2 decimales
+}
+
     obtenerCarrito() {
     const productosEnCesta = this.cesta; 
     const productosCatalogo = this.products; 
@@ -85,8 +95,7 @@ class Carrito {
         granTotal: sumaTotal
     };
 }
-
-        
+    
 }
 
 
@@ -96,6 +105,10 @@ miCarrito.actualizarUnidades("TGD5XORY1L", 8);
 
 carrito = miCarrito.obtenerCarrito()
 console.log(carrito)
+
+console.log('-----------')
+total = miCarrito.obtenerTotalPorSku("0K3QOSOV4V"); 
+console.log('total:',total)
 
 
 

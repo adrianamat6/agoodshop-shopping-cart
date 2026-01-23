@@ -100,5 +100,3 @@ console.log(carrito)
 
 
 
-
-

@@ -65,10 +65,10 @@ class Carrito {
 
     // 2. Usamos .map() para crear el array final con la cantidad dentro de cada uno
     const carrito_productos = productosEncontrados.map((cadaProducto) => {
-        // Obtenemos la cantidad usando tu método (añadiendo 'this.')
+        // Obtenemos la cantidad usando tu método 
         const unidades = this.obtenerCantidad(cadaProducto.SKU);
 
-        // Retornamos un nuevo objeto que combina lo que ya tenía el producto + la cantidad
+        // Devolvemos un nuevo objeto que combina lo que ya tenía el producto + la cantidad
         return {
             cadaProducto,    // Esto copia SKU, title y price
             quantity: unidades,  // Esto añade la cantidad
@@ -97,15 +97,7 @@ class Carrito {
 // ----------------------------------------------------------------------------------
 
 function pinta_producto_web(producto,currency){
-
-    // 1) Replicamos la primera parte: 
-    /*
-        <div class="col-product"> 
-            <div class="articulo">iFhone 13 Pro</div>
-            <div class="referencia">Ref: 0K3QOSOV4V</div> 
-        </div>
-
-    */
+  
     // A) Creamos el contenedor de la columna
     const colProduct = document.createElement('div');
     colProduct.classList.add('col-product');
@@ -128,21 +120,6 @@ function pinta_producto_web(producto,currency){
     const nodoProductList = document.querySelector('#product-list');
     nodoProductList.appendChild(colProduct); 
 
-    // Visualiza resultados
-    //console.log(nodoProductList.outerHTML);
-
-
-    // 2) Replicamos la segunda parte: 
-    /*
-        <div class="col-cantidad">
-            <div class = "selector-cantidad">
-                <div>-</div>
-                <div class="num-unidades">3</div>
-                <div>+</div>
-            </div>
-        </div>
-
-    */
 
     // Creamos los elementos sueltos
     const colCantidad = document.createElement('div'); 
@@ -176,11 +153,7 @@ function pinta_producto_web(producto,currency){
 
     nodoProductList.appendChild(colCantidad); 
 
-    // 3) Replicamos la tercera parte: 
-    /*
-        <div class="col-unidad">938,99€</div>
-        <div class="col-total">2816,97€</div>
-    */
+ 
 
     const colUnidad = document.createElement('div'); 
     colUnidad.classList.add('col-unidad'); 
@@ -188,7 +161,8 @@ function pinta_producto_web(producto,currency){
 
     const colTotal = document.createElement('div'); 
     colTotal.classList.add('col-total'); 
-    colTotal.textContent = `${producto.price}${currency}`
+    colTotal.textContent = `0${currency}`
+    colTotal.dataset.sku = producto.SKU; 
 
     nodoProductList.appendChild(colUnidad); 
     nodoProductList.appendChild(colTotal); 
@@ -205,7 +179,8 @@ for(let producto of DB.products){
 const miCarrito = new Carrito(DB.products);
 // ----------------------------------------------------------------------------------
 
-console.log('---------------------------')
+
+// Logica de botones: 
 const nodoBotonesRestar = document.querySelectorAll('.restar'); 
 const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
 
@@ -227,12 +202,10 @@ function escucha_pulsaciones_sumar(){
 
 
 function restar_numero_unidades(event){
-  console.log('Se ha pulsado un botón sumar'); 
 
   const botonPulsado = event.target; 
   const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
 
-  console.log('botonPulsado:',botonPulsado)
   cantidad = miCarrito.obtenerCantidad(sku_pulsado);
   miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
   cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
@@ -240,7 +213,9 @@ function restar_numero_unidades(event){
 
 
   botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-  console.log(botonUnidades)
+
+  nodoTotal = document.querySelector()
+
 
   pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
 
@@ -249,22 +224,22 @@ function restar_numero_unidades(event){
 }; 
 
 function sumar_numero_unidades(event){
-  console.log('Se ha pulsado un botón sumar'); 
 
   const botonPulsado = event.target; 
   const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
 
-  console.log('botonPulsado:',botonPulsado)
   cantidad = miCarrito.obtenerCantidad(sku_pulsado);
   miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
   cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
-  cantidad_actualizada
+  
 
 
-  botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-  console.log(botonUnidades)
-
+  const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
   pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
+
+
+  const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
+  console.log(nodoProductoTotal)
 
 }; 
 
@@ -272,7 +247,6 @@ function sumar_numero_unidades(event){
 function pintar_numeros_actualizados(nodoNumero,cantidad){
   nodoNumero.innerHTML = `${cantidad}`
 
-  console.log(miCarrito.obtenerCarrito())
 }
 
 escucha_pulsaciones_restar();
@@ -280,4 +254,10 @@ escucha_pulsaciones_sumar();
 
 
 
+// ----------------------------------------------------------------------------------
 
+
+function pintar_totales(nodoProductoTotal,cantidad_total){
+
+
+}

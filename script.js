@@ -146,12 +146,12 @@ function pinta_producto_web(producto,currency){
     // B) Creamos el contenedor del articulo
     const articulo = document.createElement('div');
     articulo.classList.add('articulo');
-    articulo.textContent = `${producto.title}`;
+    articulo.innerHTML = `${producto.title}`;
 
     // C) Creamos contendor para añadir la referencia
     const referencia = document.createElement('div'); 
     referencia.classList.add('referencia');
-    referencia.textContent = `Ref: ${producto.SKU}`;
+    referencia.innerHTML = `Ref: ${producto.SKU}`;
 
     // D) Anidamos el contenedor dentro del contenedor padre 'col-product'
     colProduct.appendChild(articulo);
@@ -171,18 +171,18 @@ function pinta_producto_web(producto,currency){
 
     const divMenos = document.createElement('button'); 
     divMenos.classList.add('restar'); 
-    divMenos.textContent = '-'; 
+    divMenos.innerHTML = '-'; 
     divMenos.dataset.sku = producto.SKU; 
 
 
     const numUnidades = document.createElement('div'); 
     numUnidades.classList.add('num-unidades'); 
-    numUnidades.textContent = Number(0); 
+    numUnidades.innerHTML = Number(0); 
     numUnidades.id = `unidades-${producto.SKU}`
 
     const divMas = document.createElement('button'); 
     divMas.classList.add('sumar'); 
-    divMas.textContent = '+'; 
+    divMas.innerHTML = '+'; 
     divMas.dataset.sku = producto.SKU; 
 
     // Anidamos los elementos
@@ -198,11 +198,11 @@ function pinta_producto_web(producto,currency){
 
     const colUnidad = document.createElement('div'); 
     colUnidad.classList.add('col-unidad'); 
-    colUnidad.textContent = `${producto.price}`
+    colUnidad.innerHTML = `${producto.price}`
 
     const colTotal = document.createElement('div'); 
     colTotal.classList.add('col-total'); 
-    colTotal.textContent = `${Number(0).toFixed(2)}${currency}`;
+    colTotal.innerHTML = `${Number(0).toFixed(2)}${currency}`;
     colTotal.dataset.sku = producto.SKU; 
 
     nodoProductList.appendChild(colUnidad); 
@@ -285,47 +285,40 @@ function pintar_total_carrito() {
 
   if(!nodoContenedorDerecha.querySelector('h2')){
     const tituloTotal = document.createElement('h2');
-    tituloTotal.textContent = 'Total';  
+    tituloTotal.innerHTML = 'Total';  
     nodoContenedorDerecha.appendChild(tituloTotal); 
   }  
 
 
-  // 3. Obtenemos datos
   const infoCarrito = miCarrito.obtenerCarrito();
   const articulos = infoCarrito.articulos; 
 
-  // 4. Bucle corregido
   for(let cadaArticulo of articulos){
-    
-    // --- AQUÍ ESTABA EL ERROR ---
-    // Los datos del producto están anidados dentro de "cadaProducto"
     const datosProducto = cadaArticulo.cadaProducto; 
     
     const title = datosProducto.title; 
-    // Nota: aquí solemos querer el precio TOTAL de la línea (precio * cantidad), 
-    // que tu clase ya calcula en la propiedad .total
     const precioFila = cadaArticulo.total; 
 
     const divArticle = document.createElement('div'); 
     divArticle.classList.add('article'); 
-    divArticle.textContent = title; // Usar textContent es mejor práctica
+    divArticle.innerHTML = title; 
     nodoTablaDerecha.appendChild(divArticle);  
 
     const divPrecio = document.createElement('div'); 
     divPrecio.classList.add('precio'); 
-    divPrecio.textContent = `${precioFila}${currency}`; 
+    divPrecio.innerHTML = `${precioFila}${currency}`; 
     nodoTablaDerecha.appendChild(divPrecio); 
   }
 
   // 5. Pintar el GRAN TOTAL (Importante: faltaba esto)
   const divTOTAL = document.createElement('div'); 
   divTOTAL.classList.add('total-article'); 
-  divTOTAL.textContent = 'TOTAL';
+  divTOTAL.innerHTML = 'TOTAL';
   nodoTablaDerecha.appendChild(divTOTAL); 
 
   const divTotalPrecio = document.createElement('div'); 
   divTotalPrecio.classList.add('total-precio'); 
-  divTotalPrecio.textContent = `${(infoCarrito.granTotal).toFixed(2)}${currency}`; // granTotal viene del objeto infoCarrito
+  divTotalPrecio.innerHTML = `${(infoCarrito.granTotal).toFixed(2)}${currency}`; // granTotal viene del objeto infoCarrito
   nodoTablaDerecha.appendChild(divTotalPrecio); 
 
 

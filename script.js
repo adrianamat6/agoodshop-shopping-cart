@@ -240,18 +240,24 @@ function sumar_numero_unidades(event){
 
 
   const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
-  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada)
+  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false)
 
 
   const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
-  console.log(nodoProductoTotal)
+  total_actualizado = miCarrito.obtenerTotalPorSku(sku_pulsado); 
+  console.log(typeof(total_actualizado))
+  pintar_numeros_actualizados(nodoProductoTotal,total_actualizado,true); 
 
 }; 
 
 
-function pintar_numeros_actualizados(nodoNumero,cantidad){
-  nodoNumero.innerHTML = `${cantidad}`
+function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency){
 
+  if (mostrarCurrency){
+  nodoNumero.innerHTML = `${cantidad}${currency}`
+  }else{
+      nodoNumero.innerHTML = `${cantidad}`; 
+  }
 }
 
 escucha_pulsaciones_restar();
@@ -262,7 +268,4 @@ escucha_pulsaciones_sumar();
 // ----------------------------------------------------------------------------------
 
 
-function pintar_totales(nodoProductoTotal,cantidad_total){
 
-
-}

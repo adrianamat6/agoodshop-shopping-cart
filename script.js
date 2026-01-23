@@ -261,7 +261,7 @@ function sumar_o_restar_numero_unidades(event){
 
 
   
-  pintar_total_carrito(sku_pulsado)
+  pintar_total_carrito()
 
 
 
@@ -276,49 +276,61 @@ function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency){
 }; 
 
 
-function pintar_total_carrito(SKU){
+function pintar_total_carrito() {
 
-  nodoContenedorDerecha = document.querySelector('#cart-summary'); 
-  nodoTablaDerecha = document.querySelector('#cart-table');
-  console.log(nodoTablaDerecha)
+  const nodoContenedorDerecha = document.querySelector('#cart-summary'); 
+  const nodoTablaDerecha = document.querySelector('#cart-table');
   
-  const tituloTotal = document.createElement('h2');
-  tituloTotal.textContent = 'Total'; 
+  nodoTablaDerecha.innerHTML = '';
 
-  nodoContenedorDerecha.appendChild(tituloTotal); 
-
-
-  // <div class="article">iFhone13 Pro</div>
-  // <div class="precio">2816,97€</div>
-
-  divArticle = document.createElement('div'); 
-  divArticle.classList.add('article'); 
-  divArticle.innerHTML = miCarrito.obtenerNombreProducto(SKU);
-  nodoTablaDerecha.appendChild(divArticle); 
+  if(!nodoContenedorDerecha.querySelector('h2')){
+    const tituloTotal = document.createElement('h2');
+    tituloTotal.textContent = 'Total';  
+    nodoContenedorDerecha.appendChild(tituloTotal); 
+  }  
 
 
-  divPrecio = document.createElement('div'); 
-  divPrecio.classList.add('precio'); 
-  divPrecio.innerHTML = `${miCarrito.obtenerTotalPorSku(SKU)}${currency}`; 
-  nodoTablaDerecha.appendChild(divPrecio); 
+  // 3. Obtenemos datos
+  const infoCarrito = miCarrito.obtenerCarrito();
+  const articulos = infoCarrito.articulos; 
 
+  // 4. Bucle corregido
+  for(let cadaArticulo of articulos){
+    
+    // --- AQUÍ ESTABA EL ERROR ---
+    // Los datos del producto están anidados dentro de "cadaProducto"
+    const datosProducto = cadaArticulo.cadaProducto; 
+    
+    const title = datosProducto.title; 
+    // Nota: aquí solemos querer el precio TOTAL de la línea (precio * cantidad), 
+    // que tu clase ya calcula en la propiedad .total
+    const precioFila = cadaArticulo.total; 
 
-    // <div class="total-article">TOTAL</div>
-    // <div class="total-precio">5820€</div> -->
-  divTOTAL = document.createElement('div'); 
+    const divArticle = document.createElement('div'); 
+    divArticle.classList.add('article'); 
+    divArticle.textContent = title; // Usar textContent es mejor práctica
+    nodoTablaDerecha.appendChild(divArticle);  
+
+    const divPrecio = document.createElement('div'); 
+    divPrecio.classList.add('precio'); 
+    divPrecio.textContent = `${precioFila}${currency}`; 
+    nodoTablaDerecha.appendChild(divPrecio); 
+  }
+
+  // 5. Pintar el GRAN TOTAL (Importante: faltaba esto)
+  const divTOTAL = document.createElement('div'); 
   divTOTAL.classList.add('total-article'); 
-  divTOTAL.innerHTML = 'TOTAL';
+  divTOTAL.textContent = 'TOTAL';
   nodoTablaDerecha.appendChild(divTOTAL); 
 
-  divTotalPrecio = document.createElement('div'); 
+  const divTotalPrecio = document.createElement('div'); 
   divTotalPrecio.classList.add('total-precio'); 
-  divTotalPrecio.innerHTML = `${miCarrito.obtenerPrecioTotalCarrito()}${currency}`; 
+  divTotalPrecio.textContent = `${(infoCarrito.granTotal).toFixed(2)}${currency}`; // granTotal viene del objeto infoCarrito
   nodoTablaDerecha.appendChild(divTotalPrecio); 
 
 
-  nodoContenedorDerecha.appendChild(nodoTablaDerecha); 
-}; 
-
+  nodoContenedorDerecha.appendChild(nodoTablaDerecha)
+}
 
 
 // ----------------------------------------------------------------------------------

@@ -112,4 +112,23 @@ console.log('total:',total)
 
 
 
+// ----------------------------------------------
+const nodoBotonesRestar = document.querySelectorAll('.restar'); 
+const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
 
+function escucha_pulsaciones_restar(){
+  for (let btn of nodoBotonesRestar){
+    btn.addEventListener('click', restar_numero_unidades); 
+  }; 
+};
+
+function escucha_pulsaciones_sumar(){
+  // CORREGIDO: Ahora recorremos los botones de sumar
+  for (let btn of nodoBotonesSumar){
+    btn.addEventListener('click', sumar_numero_unidades); 
+  }; 
+};
+
+
+escucha_pulsaciones_restar();
+escucha_pulsaciones_sumar();

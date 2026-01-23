@@ -186,24 +186,44 @@ const miCarrito = new Carrito(DB.products);
 
 
 // Logica de botones: 
-const nodoBotonesRestar = document.querySelectorAll('.restar'); 
-const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
 
 
+const nodoBotonesSumaryRestar = document.querySelectorAll('.sumar, .restar');
+console.log(nodoBotonesSumaryRestar); 
 
 
-function escucha_pulsaciones_restar(){
-  for (let btn of nodoBotonesRestar){
-    btn.addEventListener('click', restar_numero_unidades); 
+function escucha_pulsaciones_sumar_o_restar(){
+  for (let btn of nodoBotonesSumaryRestar){
+    btn.addEventListener('click', sumar_o_restar_numero_unidades); 
   }; 
 };
 
-function escucha_pulsaciones_sumar(){
-  // CORREGIDO: Ahora recorremos los botones de sumar
-  for (let btn of nodoBotonesSumar){
-    btn.addEventListener('click', sumar_numero_unidades); 
-  }; 
-};
+
+function sumar_o_restar_numero_unidades(event){
+
+  const botonPulsado = event.target; 
+  const esSumar = botonPulsado.classList.contains('sumar'); 
+  const sku_pulsado = botonPulsado.getAttribute('data-sku'); 
+
+  cantidad = miCarrito.obtenerCantidad(sku_pulsado);
+  if(esSumar){
+    miCarrito.actualizarUnidades(sku_pulsado, cantidad+1);
+  }else{
+    miCarrito.actualizarUnidades(sku_pulsado, cantidad-1);
+  }
+
+  cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
+  
+  const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`)
+  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false)
+
+
+  const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
+  total_actualizado = miCarrito.obtenerTotalPorSku(sku_pulsado); 
+  console.log(typeof(total_actualizado))
+  pintar_numeros_actualizados(nodoProductoTotal,total_actualizado,true); 
+
+}; 
 
 
 function restar_numero_unidades(event){
@@ -260,8 +280,7 @@ function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency){
   }
 }
 
-escucha_pulsaciones_restar();
-escucha_pulsaciones_sumar();
+escucha_pulsaciones_sumar_o_restar()
 
 
 

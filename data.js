@@ -1,23 +1,14 @@
 'use-strict'
 
-// Datos que llegarían de la API
-export const DB = {
-    "currency": "€",
-    "products": [
-      {
-        "SKU": "0K3QOSOV4V",
-        "title": "iFhone 13 Pro",
-        "price": "938.99"
-      },
-      {
-        "SKU": "TGD5XORY1L",
-        "title": "Cargador",
-        "price": "49.99"
-      },
-      {
-        "SKU": "IOKW9BQ9F3",
-        "title": "Funda de piel",
-        "price": "79.99"
-      }
-    ]
-};
+const promesa = fetch('https://api.jsonblob.com/019bf134-8560-7a33-ac96-0fb805dca64f');
+
+// Asignamos el resultado de la cadena de promesas a la variable que exportamos
+export const DB_promesa = promesa.then((respuesta) => {
+    return respuesta.json();
+}).then(datos => {
+    //console.log('Datos recibidos:', datos);
+    return datos; 
+}).catch(error => {
+    console.log('Error', error);
+});
+

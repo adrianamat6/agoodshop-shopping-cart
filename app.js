@@ -1,6 +1,6 @@
 'use-strict'
 
-import { DB } from './data.js'; 
+import { DB_promesa } from './data.js'; 
 import { Carrito } from './carrito.js'; 
 import {
   pinta_producto_web,
@@ -10,6 +10,9 @@ import {
 
 
 // Iniciamos
+const DB = await DB_promesa; 
+console.log(DB); 
+
 const currency = DB.currency; 
 const productos = DB.products; 
 for(let producto of DB.products){

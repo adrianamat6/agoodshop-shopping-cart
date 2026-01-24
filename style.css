@@ -14,6 +14,18 @@
     justify-content: center;
 }
 
+#product-list > div:nth-child(2) {
+    text-align: center;
+}
+
+#product-list > div:nth-child(3) {
+    text-align: center;
+}
+
+#product-list > div:nth-child(4) {
+    text-align: center;
+}
+
 .header-grid{
     color: rgb(50, 50, 50); 
     padding-bottom: 7px;
@@ -64,7 +76,7 @@
 #product-list{
     display:grid; 
     /* grid-template-columns: 40% 20% 20% 20%; */
-    grid-template-columns: minmax(160px, 40%) minmax(120px, 30%) minmax(70px, 10%) minmax(80px, 10%);
+    grid-template-columns: minmax(160px, 25%) minmax(120px, 25%) minmax(70px, 10%) minmax(80px, 10%);
     grid-auto-rows: auto;
     flex-wrap: wrap;
     width: 65%; 
@@ -108,22 +120,22 @@
     font-weight: bold;
 }
 
-/* @media (max-width: 768px) {
-    
-    /* 1. Cambiar la disposición principal a columna */
-    /* #detail-products {
-        flex-direction: column; /* Uno debajo del otro */
-        /* gap: 40px; /* Más espacio entre la lista y el resumen */
-    /* }
 
-    #product-list, 
-    #cart-summary {
+@media (max-width: 768px) {
+     #detail-products {
+        flex-direction: column; 
+        gap: 40px; 
+     }
+
+    #product-list, #cart-summary {
         width: 100%;
         margin: 0;
     }
 
-
-     #product-list {
-        grid-template-columns: 1fr auto auto auto;
+    #product-list {
+        grid-template-columns: 0.4fr auto auto auto;
         gap: 5px;
-     } } */
+     } 
+    
+} 
+

@@ -1,31 +1,6 @@
 'use-strict'
 
-// Datos que llegarían de la API
-const DB = {
-    "currency": "€",
-    "products": [
-      {
-        "SKU": "0K3QOSOV4V",
-        "title": "iFhone 13 Pro",
-        "price": "938.99"
-      },
-      {
-        "SKU": "TGD5XORY1L",
-        "title": "Cargador",
-        "price": "49.99"
-      },
-      {
-        "SKU": "IOKW9BQ9F3",
-        "title": "Funda de piel",
-        "price": "79.99"
-      }
-    ]
-};
-
-
-// --------------------------------------------------------
-
-class Carrito {
+export class Carrito {
     constructor(products) {
       this.products = products; 
       this.cesta = {}; 
@@ -121,8 +96,6 @@ class Carrito {
         };
 
     });
-
-
     
     const sumaTotal = this.obtenerPrecioTotalCarrito(); 
 
@@ -133,39 +106,3 @@ class Carrito {
 }
     
 }
-
-
-const miCarrito = new Carrito(DB.products);
-miCarrito.actualizarUnidades("0K3QOSOV4V", 4);
-miCarrito.actualizarUnidades("TGD5XORY1L", 8);
-
-carrito = miCarrito.obtenerCarrito()
-console.log(carrito)
-
-
-
-
-
-
-// // ----------------------------------------------
-// const nodoBotonesRestar = document.querySelectorAll('.restar'); 
-// const nodoBotonesSumar = document.querySelectorAll('.sumar'); 
-
-// function escucha_pulsaciones_restar(){
-//   for (let btn of nodoBotonesRestar){
-//     btn.addEventListener('click', restar_numero_unidades); 
-//   }; 
-// };
-
-// function escucha_pulsaciones_sumar(){
-//   // CORREGIDO: Ahora recorremos los botones de sumar
-//   for (let btn of nodoBotonesSumar){
-//     btn.addEventListener('click', sumar_numero_unidades); 
-//   }; 
-// };
-
-
-
-
-// escucha_pulsaciones_restar();
-// escucha_pulsaciones_sumar();

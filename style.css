@@ -120,6 +120,15 @@
     font-weight: bold;
 }
 
+.empty-msg {
+    padding: 20px;
+    text-align: center;
+    color: #888;         /* Texto gris */
+    font-style: italic;  /* Cursiva */
+    background-color: #f9f9f9; /* Fondo gris claro */
+    border: 1px dashed #ccc;   /* Borde discontinuo */
+    border-radius: 8px;  /* Bordes redondeados */
+}
 
 @media (max-width: 768px) {
      #detail-products {

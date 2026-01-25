@@ -3,9 +3,9 @@
 import { DB_promesa } from './data.js'; 
 import { Carrito } from './carrito.js'; 
 import {
-  pinta_producto_web,
-  pintar_numeros_actualizados,
-  pintar_total_carrito
+  pintaProductoWeb,
+  pintarNumerosActualizados,
+  pintarTotalCarrito
 } from './ui.js'; 
 
 
@@ -16,7 +16,7 @@ const productos = DB.products;
 
 // Pintamos productos que nos llegan desde API
 for(let producto of DB.products){
-    pinta_producto_web(producto,currency); 
+    pintaProductoWeb(producto,currency); 
 }
 
 // 
@@ -55,16 +55,16 @@ function sumar_o_restar_numero_unidades(event){
 
   const cantidad_actualizada = miCarrito.obtenerCantidad(sku_pulsado);
   const botonUnidades = document.querySelector(`#unidades-${sku_pulsado}`);
-  pintar_numeros_actualizados(botonUnidades,cantidad_actualizada,false,currency);
+  pintarNumerosActualizados(botonUnidades,cantidad_actualizada,false,currency);
 
 
   const nodoProductoTotal = document.querySelector(`.col-total[data-sku="${sku_pulsado}"]`);
   const total_actualizado = miCarrito.obtenerTotalPorSku(sku_pulsado); 
-  pintar_numeros_actualizados(nodoProductoTotal,total_actualizado,true,currency); 
+  pintarNumerosActualizados(nodoProductoTotal,total_actualizado,true,currency); 
 
 
   const infoCarrito = miCarrito.obtenerCarrito();
-  pintar_total_carrito(infoCarrito,currency); 
+  pintarTotalCarrito(infoCarrito,currency); 
 
 
 

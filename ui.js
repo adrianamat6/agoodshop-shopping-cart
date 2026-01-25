@@ -1,79 +1,69 @@
 'use-strict'
 
-export function pinta_producto_web(producto,currency){
-  
-    // A) Creamos el contenedor de la columna
-    const colProduct = document.createElement('div');
-    colProduct.classList.add('col-product');
 
-    // B) Creamos el contenedor del articulo
-    const articulo = document.createElement('div');
-    articulo.classList.add('articulo');
-    articulo.innerHTML = `${producto.title}`;
+function crearElemento(tag, clase, contenido = '') {
+    const elemento = document.createElement(tag);
+    if (clase){
+      elemento.classList.add(clase);
+    }; 
 
-    // C) Creamos contendor para añadir la referencia
-    const referencia = document.createElement('div'); 
-    referencia.classList.add('referencia');
-    referencia.innerHTML = `Ref: ${producto.SKU}`;
+    if(contenido){
+      elemento.innerHTML = contenido;
+    }; 
 
-    // D) Anidamos el contenedor dentro del contenedor padre 'col-product'
-    colProduct.appendChild(articulo);
-    colProduct.appendChild(referencia); 
+    return elemento;
+}
 
-    // E) Anidamos los contenedores dentro del contenedor padre 'product-list'
+
+export function pintaProductoWeb(producto, currency){
     const nodoProductList = document.querySelector('#product-list');
-    nodoProductList.appendChild(colProduct); 
+
+    // 1. Columna Producto
+    const colProduct = crearElemento('div', 'col-product');
+    const articulo = crearElemento('div', 'articulo', producto.title);
+    const referencia = crearElemento('div', 'referencia', `Ref: ${producto.SKU}`);
+    
+    colProduct.appendChild(articulo);
+    colProduct.appendChild(referencia);
+
+    // 2. Columna Cantidad
+    const colCantidad = crearElemento('div', 'col-cantidad');
+    const selCantidad = crearElemento('div', 'selector-cantidad');
+
+    // Botón MENOS
+    const divMenos = crearElemento('button', 'restar', '-');
+    divMenos.dataset.sku = producto.SKU;
+
+    // Número central
+    const numUnidades = crearElemento('div', 'num-unidades', '0');
+    numUnidades.id = `unidades-${producto.SKU}`;
+
+    // Botón MÁS 
+    const divMas = crearElemento('button', 'sumar', '+');
+    divMas.dataset.sku = producto.SKU;
+
+    // Añadimos al contenedor
+    selCantidad.appendChild(divMenos);
+    selCantidad.appendChild(numUnidades);
+    selCantidad.appendChild(divMas); 
+    colCantidad.appendChild(selCantidad);
+
+    // 3. Columna Precio
+    const colUnidad = crearElemento('div', 'col-unidad', `${producto.price}`);
+
+    // 4. Columna Total
+    const colTotal = crearElemento('div', 'col-total', `0.00${currency}`);
+    colTotal.dataset.sku = producto.SKU;
+
+    // Añadimos las columnas al contenedor principal
+    nodoProductList.appendChild(colProduct);
+    nodoProductList.appendChild(colCantidad);
+    nodoProductList.appendChild(colUnidad);
+    nodoProductList.appendChild(colTotal);
+};
 
 
-    // Creamos los elementos sueltos
-    const colCantidad = document.createElement('div'); 
-    colCantidad.classList.add('col-cantidad'); 
-
-    const selCantidad = document.createElement('div'); 
-    selCantidad.classList.add('selector-cantidad'); 
-
-    const divMenos = document.createElement('button'); 
-    divMenos.classList.add('restar'); 
-    divMenos.innerHTML = '-'; 
-    divMenos.dataset.sku = producto.SKU; 
-
-
-    const numUnidades = document.createElement('div'); 
-    numUnidades.classList.add('num-unidades'); 
-    numUnidades.innerHTML = Number(0); 
-    numUnidades.id = `unidades-${producto.SKU}`
-
-    const divMas = document.createElement('button'); 
-    divMas.classList.add('sumar'); 
-    divMas.innerHTML = '+'; 
-    divMas.dataset.sku = producto.SKU; 
-
-    // Anidamos los elementos
-    selCantidad.appendChild(divMenos); 
-    selCantidad.appendChild(numUnidades); 
-    selCantidad.appendChild(divMas);
-
-    colCantidad.appendChild(selCantidad); 
-
-    nodoProductList.appendChild(colCantidad); 
-
- 
-
-    const colUnidad = document.createElement('div'); 
-    colUnidad.classList.add('col-unidad'); 
-    colUnidad.innerHTML = `${producto.price}`
-
-    const colTotal = document.createElement('div'); 
-    colTotal.classList.add('col-total'); 
-    colTotal.innerHTML = `${Number(0).toFixed(2)}${currency}`;
-    colTotal.dataset.sku = producto.SKU; 
-
-    nodoProductList.appendChild(colUnidad); 
-    nodoProductList.appendChild(colTotal); 
-}; 
-
-
-export function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency,currency){
+export function pintarNumerosActualizados(nodoNumero,cantidad, mostrarCurrency,currency){
   if (mostrarCurrency){
   nodoNumero.innerHTML = `${cantidad}${currency}`; 
   }else{
@@ -82,7 +72,7 @@ export function pintar_numeros_actualizados(nodoNumero,cantidad, mostrarCurrency
 }; 
 
 
-export function pintar_total_carrito(infoCarrito,currency) {
+export function pintarTotalCarrito(infoCarrito,currency) {
 
   const nodoContenedorDerecha = document.querySelector('#cart-summary'); 
   const nodoTablaDerecha = document.querySelector('#cart-table');

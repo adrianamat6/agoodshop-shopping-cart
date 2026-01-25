@@ -11,14 +11,15 @@ import {
 
 // Iniciamos
 const DB = await DB_promesa; 
-console.log(DB); 
-
 const currency = DB.currency; 
 const productos = DB.products; 
+
+// Pintamos productos que nos llegan desde API
 for(let producto of DB.products){
     pinta_producto_web(producto,currency); 
 }
 
+// 
 const miCarrito = new Carrito(DB.products);
 // ----------------------------------------------------------------------------------
 

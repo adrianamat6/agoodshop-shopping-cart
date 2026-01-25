@@ -121,7 +121,7 @@
 }
 
 .empty-msg {
-    padding: 20px;
+    padding: 100px 20px;
     text-align: center;
     color: #888;         /* Texto gris */
     font-style: italic;  /* Cursiva */

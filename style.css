@@ -123,11 +123,11 @@
 .empty-msg {
     padding: 100px 20px;
     text-align: center;
-    color: #888;         /* Texto gris */
-    font-style: italic;  /* Cursiva */
-    background-color: #f9f9f9; /* Fondo gris claro */
-    border: 1px dashed #ccc;   /* Borde discontinuo */
-    border-radius: 8px;  /* Bordes redondeados */
+    color: #888;        
+    font-style: italic;  
+    background-color: #f9f9f9; 
+    border: 1px dashed #ccc;  
+    border-radius: 8px;  
 }
 
 @media (max-width: 768px) {

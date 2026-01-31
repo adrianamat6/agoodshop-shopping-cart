@@ -2,8 +2,8 @@
 
 export class Carrito {
     constructor(products) {
-        this.products = products;
-        this.cesta = {};
+        this.products = products; // catalogo total
+        this.cesta = {};          // cesta de productos
     };
 
     actualizarUnidades(SKU, cantidad) {
@@ -49,9 +49,10 @@ export class Carrito {
         const productosCatalogo = this.products;
 
         // 1. Filtramos
-        const productosEncontrados = productosCatalogo.filter((cadaProducto) => {
-            return cadaProducto.SKU in productosEnCesta;
-        });
+        const productosEncontrados = this.products.filter((producto) => {
+                const cantidad = this.obtenerCantidad(producto.SKU);
+                return cantidad > 0;
+            });
 
         // 2. Mapeamos los productos del carrito para obtener la cantidad y el precio total a pagar
         const carrito_productos = productosEncontrados.map((cadaProducto) => {

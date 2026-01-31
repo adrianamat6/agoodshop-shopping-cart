@@ -1,6 +1,6 @@
 'use-strict'
 
-const promesa = fetch('https://api.jsonblob.com/019bfbff-2bee-75dc-bda1-006522f1260e');
+const promesa = fetch('https://api.jsonblob.com/019c13d1-19b9-7f1c-bf7d-d515371fa9ca');
 
 // Asignamos el resultado de la cadena de promesas a la variable que exportamos
 export const DB_promesa = promesa.then((respuesta) => {

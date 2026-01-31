@@ -1,5 +1,7 @@
 'use-strict'
 
+import { gestionarClickBoton } from './events.js'; 
+
 // --- 1. Funcion auxiliar para crear elementos  ---
 function crearElemento(tag, clase, contenido = '') {
     const elemento = document.createElement(tag);
@@ -9,7 +11,7 @@ function crearElemento(tag, clase, contenido = '') {
 }
 
 // --- 2. PINTAR PRODUCTOS (Catálogo) - Columna izquierda ---
-export function pintaProductoWeb(producto, currency){
+export function pintaProductoWeb(producto, currency, miCarrito){
     const nodoProductList = document.querySelector('#product-list');
 
     // Columna Producto
@@ -22,13 +24,19 @@ export function pintaProductoWeb(producto, currency){
     const selCantidad = crearElemento('div', 'selector-cantidad');
 
     const divMenos = crearElemento('button', 'restar', '-');
-    divMenos.dataset.sku = producto.SKU;
+    divMenos.dataset.sku = producto.SKU; 
+    divMenos.addEventListener('click', function(event){
+        gestionarClickBoton(event,miCarrito,currency); 
+    }); 
 
     const numUnidades = crearElemento('div', 'num-unidades', '0');
     numUnidades.id = `unidades-${producto.SKU}`;
 
     const divMas = crearElemento('button', 'sumar', '+');
     divMas.dataset.sku = producto.SKU;
+    divMas.addEventListener('click', function(event){
+        gestionarClickBoton(event,miCarrito,currency); 
+    }); 
 
     selCantidad.appendChild(divMenos);
     selCantidad.appendChild(numUnidades);

@@ -8,7 +8,7 @@ import { Carrito } from './carrito.js';
 import { pintaProductoWeb, pintarTotalCarrito } from './ui.js'; 
 
 // Importamos el gestor de eventos
-import { activarBotones } from './events.js'; 
+//import { activarBotones } from './events.js'; 
 
 
 async function iniciarApp() {
@@ -18,20 +18,21 @@ async function iniciarApp() {
   const currency = DB.currency; 
   const productos = DB.products; 
 
-  // 2. UI INICIAL (Catálogo)
-  for(let producto of productos){
-      pintaProductoWeb(producto, currency); 
-  }
-
-  // 3. LÓGICA (Carrito)
+ // 2. Creamos el Carrito
   const miCarrito = new Carrito(productos);
 
-  // 4. UI INICIAL (Carrito vacío)
+
+  // 3. UI Inicial - Catálogo productos (parte izquierda)
+  for(let producto of productos){
+      pintaProductoWeb(producto, currency,miCarrito); 
+  }
+
+  // 4. UI Inicial - Carrito vacío (parte derecha)
   const estadoInicial = miCarrito.obtenerCarrito();
   pintarTotalCarrito(estadoInicial, currency);
 
   // 5. INTERACCIÓN (Delegamos en events.js)
-  activarBotones(miCarrito, currency);
+  // activarBotones(miCarrito, currency);
 }
 
 // Arrancar

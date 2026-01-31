@@ -5,27 +5,28 @@ import { pintarNumerosActualizados, pintarTotalCarrito } from './ui.js';
 /**
  * Función encargada de asignar los listeners a los botones del DOM
  */
-export function activarBotones(carrito, currency) {
-    const botones = document.querySelectorAll('.sumar, .restar');
+// export function activarBotones(carrito, currency) {
+//     const botones = document.querySelectorAll('.sumar, .restar');
 
-    for (let btn of botones){
-        btn.addEventListener('click', (event) => {
-            gestionarClickBoton(event, carrito, currency);
-        }); 
-    }; 
-}
+//     for (let btn of botones){
+//         btn.addEventListener('click', (event) => {
+//             gestionarClickBoton(event, carrito, currency);
+//         }); 
+//     }; 
+// }
 
 
 /**
  * Función Controlador: Gestiona la lógica de qué pasa al pulsar
  * (No se exporta porque solo se usa internamente aquí)
  */
-function gestionarClickBoton(event, carrito, currency) {
+export function gestionarClickBoton(event, carrito, currency) {
     
     const botonPulsado = event.target; 
     const sku = botonPulsado.dataset.sku; 
     const esSumar = botonPulsado.classList.contains('sumar'); 
 
+    console.log('pulsado')
     // 1. Preguntamos a la clase la cantidad actual
     const cantidadActual = carrito.obtenerCantidad(sku);
     let nuevaCantidad;

@@ -25,6 +25,7 @@ export function pintaProductoWeb(producto, currency, miCarrito){
 
     const divMenos = crearElemento('button', 'restar', '-');
     divMenos.dataset.sku = producto.SKU; 
+    // Creamos el evento aquí
     divMenos.addEventListener('click', function(event){
         gestionarClickBoton(event,miCarrito,currency); 
     }); 
@@ -33,6 +34,7 @@ export function pintaProductoWeb(producto, currency, miCarrito){
     numUnidades.id = `unidades-${producto.SKU}`;
 
     const divMas = crearElemento('button', 'sumar', '+');
+    // Creamos el evento aquí
     divMas.dataset.sku = producto.SKU;
     divMas.addEventListener('click', function(event){
         gestionarClickBoton(event,miCarrito,currency); 

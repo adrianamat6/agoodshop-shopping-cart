@@ -2,24 +2,6 @@
 
 import { pintarNumerosActualizados, pintarTotalCarrito } from './ui.js';
 
-/**
- * Función encargada de asignar los listeners a los botones del DOM
- */
-// export function activarBotones(carrito, currency) {
-//     const botones = document.querySelectorAll('.sumar, .restar');
-
-//     for (let btn of botones){
-//         btn.addEventListener('click', (event) => {
-//             gestionarClickBoton(event, carrito, currency);
-//         }); 
-//     }; 
-// }
-
-
-/**
- * Función Controlador: Gestiona la lógica de qué pasa al pulsar
- * (No se exporta porque solo se usa internamente aquí)
- */
 export function gestionarClickBoton(event, carrito, currency) {
     
     const botonPulsado = event.target; 
